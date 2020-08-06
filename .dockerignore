@@ -1,0 +1,9 @@
+.git
+test/
+.dockerignore
+.gitignore
+Dockerfile
+example.*.yaml
+LICENSE
+Makefile
+README.md

@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        # this is replaced by the proxy
+        # - name: http-public
+        #   containerPort: 80
+        #   protocol: TCP
+      - name: nginx-proxy
+        image: choffmeister/rate-limit-proxy-amd64:latest
+        imagePullPolicy: Always
+        args: [
+          "--config", "/rate-limit/config.yaml",
+          "--listen", "0.0.0.0:81",
+          "--target", "http://127.0.0.1:80"
+        ]
+        ports:
+        # this is the replacement
+        - name: http-public
+          containerPort: 81
+          protocol: TCP
+        volumeMounts:
+        - name: rate-limit-config
+          mountPath: /rate-limit
+      volumes:
+      - name: rate-limit-config
+        configMap:
+          name: rate-limit-config
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    run: nginx
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: http-public
+    port: 81
+    protocol: TCP
+    targetPort: http-public
+  selector:
+    run: nginx
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rate-limit-config
+data:
+  config.yaml: |
+    redis:
+      address: redis:6379
+    limits:
+      interval: 10
+      anonymous: 10
+      identified: 60
+      other:
+        system: 0
+    identifiers:
+      - jwtBearerHeader:
+          algorithm: HS256
+          verifier: EyllPgDqUmu9T+ununAWNL02fKXjQfo+QWQNpqDU6TA=
+          claim: sub
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      run: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:5
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    run: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379

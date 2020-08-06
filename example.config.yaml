@@ -1,0 +1,13 @@
+redis:
+  address: 127.0.0.1:6379
+limits:
+  interval: 10
+  anonymous: 10
+  identified: 60
+  other:
+    system: 0
+identifiers:
+  - jwtBearerHeader:
+      algorithm: HS256
+      verifier: EyllPgDqUmu9T+ununAWNL02fKXjQfo+QWQNpqDU6TA=
+      claim: sub
