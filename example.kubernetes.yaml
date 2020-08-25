@@ -18,10 +18,6 @@ spec:
         - name: http
           containerPort: 80
           protocol: TCP
-        # this is replaced by the proxy
-        # - name: http-public
-        #   containerPort: 80
-        #   protocol: TCP
       - name: nginx-proxy
         image: choffmeister/rate-limit-proxy-amd64:latest
         imagePullPolicy: Always
@@ -31,7 +27,6 @@ spec:
           "--target", "http://127.0.0.1:80"
         ]
         ports:
-        # this is the replacement
         - name: http-public
           containerPort: 81
           protocol: TCP
