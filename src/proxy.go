@@ -37,7 +37,6 @@ func (p *RateLimitProxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 	limit := p.Config.Limits.Anonymous
 	count := int64(0)
 	ttl := time.Duration(0)
-	err := error(nil)
 	if enforce {
 		for _, identifier := range p.Identifiers {
 			if key == "" {
@@ -64,15 +63,17 @@ func (p *RateLimitProxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 	}
 
 	if limit > 0 {
-		count, err = p.RedisClient.Incr(ctx, key).Result()
+		countRaw, err := p.RedisClient.Eval(ctx, `
+			local current
+			current = redis.call("incr",KEYS[1])
+			if tonumber(current) == 1 then
+				redis.call("expire",KEYS[1],ARGV[1])
+			end
+			return current
+		`, []string{key}, (time.Duration(p.Config.Limits.Interval) * time.Second).Seconds()).Result()
+		count = countRaw.(int64)
 		if err != nil {
 			log.Printf("redis error: %v\n", err)
-		}
-		if count == 1 {
-			_, err = p.RedisClient.Expire(ctx, key, time.Duration(p.Config.Limits.Interval)*time.Second).Result()
-			if err != nil {
-				log.Printf("redis error: %v\n", err)
-			}
 		}
 		ttl, err = p.RedisClient.PTTL(ctx, key).Result()
 		if err != nil {
