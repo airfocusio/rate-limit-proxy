@@ -1,4 +1,4 @@
-module github.com/choffmeister/rate-limit-proxy
+module github.com/airfocusio/rate-limit-proxy
 
 go 1.17
 

@@ -10,7 +10,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/choffmeister/rate-limit-proxy/internal"
+	"github.com/airfocusio/rate-limit-proxy/internal"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/go-cmp/cmp"
 )

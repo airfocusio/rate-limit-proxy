@@ -19,7 +19,7 @@ spec:
           containerPort: 80
           protocol: TCP
       - name: nginx-proxy
-        image: choffmeister/rate-limit-proxy-amd64:latest
+        image: ghcr.io/airfocusio/rate-limit-proxy:latest
         imagePullPolicy: Always
         args: [
           "--config", "/rate-limit/config.yaml",

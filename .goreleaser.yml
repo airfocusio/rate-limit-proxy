@@ -12,8 +12,8 @@ builds:
       - amd64
 dockers:
   - image_templates:
-      - "ghcr.io/choffmeister/{{ .ProjectName }}:{{ .Tag }}"
-      - "ghcr.io/choffmeister/{{ .ProjectName }}:latest"
+      - "ghcr.io/airfocusio/{{ .ProjectName }}:{{ .Tag }}"
+      - "ghcr.io/airfocusio/{{ .ProjectName }}:latest"
 checksum:
   name_template: 'checksums.txt'
 snapshot:
