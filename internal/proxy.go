@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"context"
@@ -71,13 +71,14 @@ func (p *RateLimitProxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 			end
 			return current
 		`, []string{key}, (time.Duration(p.Config.Limits.Interval) * time.Second).Seconds()).Result()
-		count = countRaw.(int64)
 		if err != nil {
 			log.Printf("redis error: %v\n", err)
-		}
-		ttl, err = p.RedisClient.PTTL(ctx, key).Result()
-		if err != nil {
-			log.Printf("redis error: %v\n", err)
+		} else {
+			count = countRaw.(int64)
+			ttl, err = p.RedisClient.PTTL(ctx, key).Result()
+			if err != nil {
+				log.Printf("redis error: %v\n", err)
+			}
 		}
 	}
 	remaining := limit - count

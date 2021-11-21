@@ -1,4 +1,4 @@
-package main
+package internal
 
 var hs256 = "EyllPgDqUmu9T+ununAWNL02fKXjQfo+QWQNpqDU6TA="
 var rs256 = `-----BEGIN PUBLIC KEY-----

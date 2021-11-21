@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/choffmeister/rate-limit-proxy/internal"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/go-cmp/cmp"
 )
@@ -34,7 +35,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("unable to create proxy target: %v\n", err)
 	}
-	proxy := &RateLimitProxy{
+	proxy := &internal.RateLimitProxy{
 		Config:         *config,
 		RedisClient:    *redisClient,
 		Identifiers:    *identifiers,
@@ -50,19 +51,19 @@ func main() {
 	}
 }
 
-func loadConfig(configPath string) (*RateLimitProxyConfig, *[]Identifier, error) {
+func loadConfig(configPath string) (*internal.RateLimitProxyConfig, *[]internal.Identifier, error) {
 	configYaml, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		return nil, nil, err
 	}
-	config, identifiers, err := LoadRateLimitProxyConfig(configYaml)
+	config, identifiers, err := internal.LoadRateLimitProxyConfig(configYaml)
 	if err != nil {
 		return nil, nil, err
 	}
 	return config, identifiers, nil
 }
 
-func reloadConfigLoop(configPath string, proxy *RateLimitProxy) {
+func reloadConfigLoop(configPath string, proxy *internal.RateLimitProxy) {
 	for {
 		time.Sleep(10 * time.Second)
 		config, identifiers, err := loadConfig(configPath)
@@ -92,7 +93,7 @@ func reloadConfigLoop(configPath string, proxy *RateLimitProxy) {
 	}
 }
 
-func createRedisClient(config RateLimitProxyConfig) (*redis.Client, error) {
+func createRedisClient(config internal.RateLimitProxyConfig) (*redis.Client, error) {
 	var tlsConfig *tls.Config
 	if config.Redis.TLS {
 		tlsConfig = &tls.Config{}
