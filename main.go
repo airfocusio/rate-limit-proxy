@@ -99,9 +99,13 @@ func createRedisClient(config internal.RateLimitProxyConfig) (*redis.Client, err
 		tlsConfig = &tls.Config{}
 	}
 	client := redis.NewClient(&redis.Options{
-		Addr:      config.Redis.Address,
-		Password:  config.Redis.Password,
-		TLSConfig: tlsConfig,
+		Addr:         config.Redis.Address,
+		Password:     config.Redis.Password,
+		TLSConfig:    tlsConfig,
+		MaxRetries:   1,
+		DialTimeout:  time.Duration(time.Duration.Milliseconds(1000)),
+		ReadTimeout:  time.Duration(time.Duration.Milliseconds(1000)),
+		WriteTimeout: time.Duration(time.Duration.Milliseconds(1000)),
 	})
 	return client, nil
 }
