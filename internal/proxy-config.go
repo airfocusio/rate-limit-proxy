@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 
+	"github.com/airfocusio/go-expandenv"
 	"github.com/google/go-cmp/cmp"
 	"gopkg.in/yaml.v3"
 )
@@ -38,7 +39,21 @@ type RateLimitProxyConfig struct {
 }
 
 // LoadRateLimitProxyConfig ...
-func LoadRateLimitProxyConfig(bytes []byte) (*RateLimitProxyConfig, *[]Identifier, error) {
+func LoadRateLimitProxyConfig(bytesRaw []byte) (*RateLimitProxyConfig, *[]Identifier, error) {
+	var expansionTemp interface{}
+	err := yaml.Unmarshal(bytesRaw, &expansionTemp)
+	if err != nil {
+		return nil, nil, err
+	}
+	expansionTemp, err = expandenv.ExpandEnv(expansionTemp)
+	if err != nil {
+		return nil, nil, err
+	}
+	bytes, err := yaml.Marshal(expansionTemp)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	config := &RateLimitProxyConfig{}
 	if err := yaml.Unmarshal(bytes, config); err != nil {
 		return nil, nil, err

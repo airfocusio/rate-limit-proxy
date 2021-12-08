@@ -1,9 +1,9 @@
 redis:
-  address: 127.0.0.1:6379
+  address: ${REDIS_HOST:-127.0.0.1}:${REDIS_PORT:number:-6379}
 limits:
-  interval: 10
-  anonymous: 10
-  identified: 60
+  interval: ${LIMIT_INTERVAL:number:-10}
+  anonymous: ${LIMIT_ANONYMOUS:number:-10}
+  identified: ${LIMIT_IDENTIFIED:number:-60}
   other:
     system: 0
 identifiers:
