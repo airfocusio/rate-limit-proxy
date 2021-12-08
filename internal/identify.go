@@ -17,25 +17,25 @@ type Identifier interface {
 
 // IdentifierConfigJwtBearerHeader ...
 type IdentifierConfigJwtBearerHeader struct {
-	Algorithm string `json:"algorithm"`
-	KeyID     string `json:"keyID"`
-	Verifier  string `json:"verifier"`
-	Claim     string `json:"claim"`
+	Algorithm string `yaml:"algorithm"`
+	KeyID     string `yaml:"keyId"`
+	Verifier  string `yaml:"verifier"`
+	Claim     string `yaml:"claim"`
 }
 
 // IdentifierConfigJwtQueryParameter ...
 type IdentifierConfigJwtQueryParameter struct {
-	Algorithm string `json:"algorithm"`
-	KeyID     string `json:"keyID"`
-	Verifier  string `json:"verifier"`
-	Claim     string `json:"claim"`
-	Name      string `json:"name"`
+	Algorithm string `yaml:"algorithm"`
+	KeyID     string `yaml:"keyId"`
+	Verifier  string `yaml:"verifier"`
+	Claim     string `yaml:"claim"`
+	Name      string `yaml:"name"`
 }
 
 // IdentifierConfig ...
 type IdentifierConfig struct {
-	JwtBearerHeader *IdentifierConfigJwtBearerHeader   `json:"jwtBearerHeader"`
-	JwtQueryToken   *IdentifierConfigJwtQueryParameter `json:"jwtQueryParameter"`
+	JwtBearerHeader *IdentifierConfigJwtBearerHeader   `yaml:"jwtBearerHeader"`
+	JwtQueryToken   *IdentifierConfigJwtQueryParameter `yaml:"jwtQueryParameter"`
 }
 
 // ExtractBearerToken ...

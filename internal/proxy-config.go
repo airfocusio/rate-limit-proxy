@@ -1,53 +1,46 @@
 package internal
 
 import (
-	utiljson "encoding/json"
 	"fmt"
 
 	"github.com/google/go-cmp/cmp"
-	utilyaml "k8s.io/apimachinery/pkg/util/yaml"
+	"gopkg.in/yaml.v3"
 )
 
 // RateLimitProxyConfigLimits ...
 type RateLimitProxyConfigLimits struct {
-	Interval   int64            `json:"interval"`
-	Anonymous  int64            `json:"anonymous"`
-	Identified int64            `json:"identified"`
-	Other      map[string]int64 `json:"other"`
+	Interval   int64            `yaml:"interval"`
+	Anonymous  int64            `yaml:"anonymous"`
+	Identified int64            `yaml:"identified"`
+	Other      map[string]int64 `yaml:"other"`
 }
 
 // RateLimitProxyConfigRedis ...
 type RateLimitProxyConfigRedis struct {
-	Address   string `json:"address"`
-	Password  string `json:"password"`
-	TLS       bool   `json:"tls"`
-	KeyPrefix string `json:"keyPrefix"`
+	Address   string `yaml:"address"`
+	Password  string `yaml:"password"`
+	TLS       bool   `yaml:"tls"`
+	KeyPrefix string `yaml:"keyPrefix"`
 }
 
 // RateLimitProxyConfigPaths ...
 type RateLimitProxyConfigPaths struct {
-	Includes []string `json:"includes"`
-	Excludes []string `json:"excludes"`
+	Includes []string `yaml:"includes"`
+	Excludes []string `yaml:"excludes"`
 }
 
 // RateLimitProxyConfig ...
 type RateLimitProxyConfig struct {
-	Redis             RateLimitProxyConfigRedis  `json:"redis"`
-	Paths             RateLimitProxyConfigPaths  `json:"paths"`
-	Limits            RateLimitProxyConfigLimits `json:"limits"`
-	IdentifiersConfig []IdentifierConfig         `json:"identifiers"`
+	Redis             RateLimitProxyConfigRedis  `yaml:"redis"`
+	Paths             RateLimitProxyConfigPaths  `yaml:"paths"`
+	Limits            RateLimitProxyConfigLimits `yaml:"limits"`
+	IdentifiersConfig []IdentifierConfig         `yaml:"identifiers"`
 }
 
 // LoadRateLimitProxyConfig ...
-func LoadRateLimitProxyConfig(yaml []byte) (*RateLimitProxyConfig, *[]Identifier, error) {
+func LoadRateLimitProxyConfig(bytes []byte) (*RateLimitProxyConfig, *[]Identifier, error) {
 	config := &RateLimitProxyConfig{}
-
-	json, err := utilyaml.ToJSON(yaml)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	if err = utiljson.Unmarshal(json, config); err != nil {
+	if err := yaml.Unmarshal(bytes, config); err != nil {
 		return nil, nil, err
 	}
 
