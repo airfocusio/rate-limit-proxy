@@ -7,8 +7,8 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/golang-jwt/jwt/v4 v4.2.0
 	github.com/google/go-cmp v0.5.9
-	github.com/stretchr/testify v1.7.0
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+	github.com/stretchr/testify v1.8.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
