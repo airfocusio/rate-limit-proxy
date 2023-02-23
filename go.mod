@@ -3,7 +3,7 @@ module github.com/airfocusio/rate-limit-proxy
 go 1.17
 
 require (
-	github.com/airfocusio/go-expandenv v0.1.0-alpha.2
+	github.com/airfocusio/go-expandenv v0.1.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/golang-jwt/jwt/v4 v4.2.0
 	github.com/google/go-cmp v0.5.9
