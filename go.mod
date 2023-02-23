@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/airfocusio/go-expandenv v0.1.0-alpha.2
 	github.com/go-redis/redis/v8 v8.11.4
-	github.com/golang-jwt/jwt/v4 v4.2.0
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/go-cmp v0.5.9
 	github.com/stretchr/testify v1.7.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
