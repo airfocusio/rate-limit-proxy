@@ -12,3 +12,12 @@ test-watch: redis
 redis:
 	docker-compose up -d
 	sleep 1
+
+build:
+	goreleaser release --rm-dist --skip-publish --snapshot
+
+release:
+	goreleaser release --rm-dist
+
+trivy: build
+	trivy image ghcr.io/airfocusio/rate-limit-proxy:0.0.0-dev-amd64
