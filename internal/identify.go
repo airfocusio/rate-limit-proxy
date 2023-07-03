@@ -61,13 +61,21 @@ func ExtractQueryParameter(parameterName string) func(http.Request) (*string, er
 }
 
 // ExtractClaim ...
-func ExtractClaim(claimName string) func(claims jwt.MapClaims) (*string, error) {
+func ExtractClaim(claimNames []string) func(claims jwt.MapClaims) (*string, error) {
 	return func(claims jwt.MapClaims) (*string, error) {
-		claimValue, ok := claims[claimName].(string)
-		if !ok {
-			return nil, fmt.Errorf("jwt %s claim is missing", claimName)
+		result := ""
+		for i, name := range claimNames {
+			value, ok := claims[name].(string)
+			if !ok {
+				return nil, fmt.Errorf("jwt %s claim is missing", name)
+			}
+			if i == 0 {
+				result = result + value
+			} else {
+				result = result + "|" + value
+			}
 		}
-		return &claimValue, nil
+		return &result, nil
 	}
 }
 

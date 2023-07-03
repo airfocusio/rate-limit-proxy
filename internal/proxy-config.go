@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/airfocusio/go-expandenv"
 	"github.com/google/go-cmp/cmp"
@@ -62,20 +63,28 @@ func LoadRateLimitProxyConfig(bytesRaw []byte) (*RateLimitProxyConfig, *[]Identi
 	identifiers := []Identifier{}
 	for i, c := range config.IdentifiersConfig {
 		if c.JwtBearerHeader != nil {
+			claimNames := []string{}
+			if c.JwtBearerHeader.Claim != "" {
+				claimNames = strings.Split(c.JwtBearerHeader.Claim, "|")
+			}
 			identifiers = append(identifiers, JwtIdentifier{
 				Algorithm:         c.JwtBearerHeader.Algorithm,
 				KeyID:             c.JwtBearerHeader.KeyID,
 				Verifier:          c.JwtBearerHeader.Verifier,
 				TokenExtractor:    ExtractBearerToken,
-				IdentityExtractor: ExtractClaim(c.JwtBearerHeader.Claim),
+				IdentityExtractor: ExtractClaim(claimNames),
 			})
 		} else if c.JwtQueryToken != nil {
+			claimNames := []string{}
+			if c.JwtQueryToken.Claim != "" {
+				claimNames = strings.Split(c.JwtQueryToken.Claim, "|")
+			}
 			identifiers = append(identifiers, JwtIdentifier{
 				Algorithm:         c.JwtQueryToken.Algorithm,
 				KeyID:             c.JwtQueryToken.KeyID,
 				Verifier:          c.JwtQueryToken.Verifier,
 				TokenExtractor:    ExtractQueryParameter(c.JwtQueryToken.Name),
-				IdentityExtractor: ExtractClaim(c.JwtQueryToken.Claim),
+				IdentityExtractor: ExtractClaim(claimNames),
 			})
 		} else {
 			return nil, nil, fmt.Errorf("identifier #%d is invalid", i)
