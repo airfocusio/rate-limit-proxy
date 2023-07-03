@@ -20,7 +20,7 @@ identifiers:
     algorithm: ES256
     verifier: v2
     name: token
-    claim: foo|bar
+    claim: foo+bar
 limits:
   interval: 60
   anonymous: 1
@@ -54,7 +54,7 @@ paths:
 				Algorithm: "ES256",
 				Verifier:  "v2",
 				Name:      "token",
-				Claim:     "foo|bar",
+				Claim:     "foo+bar",
 			}},
 		},
 		Limits: RateLimitProxyConfigLimits{

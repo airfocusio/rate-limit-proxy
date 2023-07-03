@@ -89,7 +89,7 @@ func TestJwtBearerTokenIdentifier(t *testing.T) {
 		assert.Equal(t, "user:9", *id)
 	}
 	if id, err := identifierHS256WithClientID.IdentifyRequest(newTestRequest(jwtHs256User9WithClientId)); assert.NoError(t, err) {
-		assert.Equal(t, "user:9|client:1", *id)
+		assert.Equal(t, "user:9:client:1", *id)
 	}
 }
 

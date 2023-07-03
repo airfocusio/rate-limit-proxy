@@ -72,7 +72,7 @@ func ExtractClaim(claimNames []string) func(claims jwt.MapClaims) (*string, erro
 			if i == 0 {
 				result = result + value
 			} else {
-				result = result + "|" + value
+				result = result + ":" + value
 			}
 		}
 		return &result, nil

@@ -65,7 +65,7 @@ func LoadRateLimitProxyConfig(bytesRaw []byte) (*RateLimitProxyConfig, *[]Identi
 		if c.JwtBearerHeader != nil {
 			claimNames := []string{}
 			if c.JwtBearerHeader.Claim != "" {
-				claimNames = strings.Split(c.JwtBearerHeader.Claim, "|")
+				claimNames = strings.Split(c.JwtBearerHeader.Claim, "+")
 			}
 			identifiers = append(identifiers, JwtIdentifier{
 				Algorithm:         c.JwtBearerHeader.Algorithm,
@@ -77,7 +77,7 @@ func LoadRateLimitProxyConfig(bytesRaw []byte) (*RateLimitProxyConfig, *[]Identi
 		} else if c.JwtQueryToken != nil {
 			claimNames := []string{}
 			if c.JwtQueryToken.Claim != "" {
-				claimNames = strings.Split(c.JwtQueryToken.Claim, "|")
+				claimNames = strings.Split(c.JwtQueryToken.Claim, "+")
 			}
 			identifiers = append(identifiers, JwtIdentifier{
 				Algorithm:         c.JwtQueryToken.Algorithm,
