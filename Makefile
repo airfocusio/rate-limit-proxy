@@ -14,10 +14,10 @@ redis:
 	sleep 1
 
 build:
-	goreleaser release --rm-dist --skip-publish --snapshot
+	goreleaser release --clean --skip=publish --snapshot
 
 release:
-	goreleaser release --rm-dist
+	goreleaser release --clean
 
 trivy: build
 	trivy image ghcr.io/airfocusio/rate-limit-proxy:0.0.0-dev-amd64
