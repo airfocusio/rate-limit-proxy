@@ -1,0 +1,19 @@
+name: bumpr
+on:
+  push:
+    branches:
+      - main
+jobs:
+  bumpr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.BUMPER_APP_ID }}
+          private_key: ${{ secrets.BUMPER_APP_PRIVATE_KEY }}
+        id: generate-token
+      - uses: haya14busa/action-bumpr@v1
+        with:
+          github_token: ${{ steps.generate-token.outputs.token }}
+          default_bump_level: patch
